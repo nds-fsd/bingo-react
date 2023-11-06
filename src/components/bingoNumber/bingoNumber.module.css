@@ -1,0 +1,19 @@
+.number {
+    width: 80px;
+    height: 80px;
+    margin: 10px;
+}
+
+.filled-root {
+    border: 1px solid;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: blanchedalmond;
+    margin: -5px auto;
+}
+
+.filled {
+    background-color: black;
+    border-color: blanchedalmond;
+}
