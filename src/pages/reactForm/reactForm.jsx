@@ -1,11 +1,12 @@
 import styles from './reactForm.module.css';
 import { useForm } from "react-hook-form"
+import { useState } from 'react';
 
 const ReactForm = (props) => {
     const [responseError, setResponseError] = useState('');
     const [success, setSuccess] = useState(false);
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, watch, formState: { errors } } = useForm({
         defaultValues: {
             name: 'Pepe',
             email: 'pepe@gmail.com',
@@ -15,6 +16,8 @@ const ReactForm = (props) => {
         }
     });
 
+    const name = watch('name');
+
     const onSubmit = (data) => {
         console.log(data);
         fetch('http://localhost:3001/users', {
@@ -22,7 +25,7 @@ const ReactForm = (props) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({name, email, password, age, fruit})
+            body: JSON.stringify(data)
         }).then((response) => {
             console.log(response);
             if (response.status !== 200) {
@@ -76,7 +79,7 @@ const ReactForm = (props) => {
             <label for="name">
                 Age:
             </label>
-            <input {...register('age', { valueAsNumber: true, min: { value: 0, message: "Age must be a positive number" } })} placeholder="Age" type="number" /><br/>
+            <input {...register('age', { valueAsNumber: true, min: { value: 14, message: "Age must be a positive number" } })} placeholder="Age" type="number" /><br/>
 
             <label for="name">
                 Favourite fruit:
@@ -89,6 +92,7 @@ const ReactForm = (props) => {
             </select><br/>
 
             <input type="submit" />
+    
         </form>
     );
 

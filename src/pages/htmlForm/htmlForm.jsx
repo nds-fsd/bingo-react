@@ -9,8 +9,10 @@ const HtmlForm = (props) => {
     const [age, setAge] = useState('');
     const [fruit, setFruit] = useState('apple');
     const [success, setSuccess] = useState(false);
+
     const [errors , setError] = useState({name: '', email: '', password: '', age: ''});
-    const [responseError, setResponseError] = useState('');
+
+    const [responseError, setResponseError] = useState(false);
 
     const handleName = (event) => {
         setName(event.target.value);
@@ -32,15 +34,22 @@ const HtmlForm = (props) => {
         setFruit(event.target.value);
     };
 
+    function validateEmail(email) {
+        const pattern = new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+        return pattern.test(email);
+    };
+
     const handleSubmit = () => {
         const data = {name, email, password, age, fruit};
+        console.log(data);
         let error = {...errors};
+
         if (!name) {
             error = {...error, name: 'Name is required'};
         } else {
             error = {...error, name: ''};
         }
-        if (!email) {
+        if (!email || !validateEmail(email)) {
             error = {...error, email: 'Email is required'};
         } else {
             error = {...error, email: ''};
@@ -50,16 +59,18 @@ const HtmlForm = (props) => {
         } else {
             error = {...error, password: ''};
         }
-        if (age && age < 14) {
+        if (!age || (age < 14 || age > 130)) {
             error = {...error, age: 'Age must more than 14'};
         } else {
             error = {...error, age: ''};
         }
         setError(error);
+        console.log('error', error);
 
         if (error.name || error.email || error.password || error.age) return;
         
-        console.log(data);
+        console.log('data', data);
+
         fetch('http://localhost:3001/users', {
             method: 'POST',
             headers: {
@@ -114,7 +125,7 @@ const HtmlForm = (props) => {
             {errors.password && <p>{errors.password}</p>}
             <label for="password">
                 Password*:
-                <input id='password' required  minlength="8" type="password" value={password} placeholder='holahola' onChange={handlePassword}/>
+                <input id='password' required  minlength="8" type="password" value={password} placeholder='******' onChange={handlePassword}/>
             </label><br/>
 
             <label for="age">
