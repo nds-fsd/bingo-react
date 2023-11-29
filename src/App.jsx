@@ -1,16 +1,21 @@
+import { QueryClient, QueryClientProvider } from 'react-query';
 import './App.css'
 import Bingo from './pages/bingo/bingo';
-import HtmlForm from './pages/htmlForm/htmlForm';
 import ReactForm from './pages/reactForm/reactForm';
+import Users from './pages/users/user';
+
+const queryClient = new QueryClient()
 
 function App() {
   return (
-    <div className="App">
-      {/*<Bingo />*/}
-      <HtmlForm />
-      {/*<HtmlForm />*/}
-      {/*<ReactForm />*/}
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="App">
+        {/*<Bingo />*/}
+        
+        <Users />
+        <ReactForm />
+      </div>
+    </QueryClientProvider>
   );
 };
 
