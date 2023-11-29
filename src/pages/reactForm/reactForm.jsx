@@ -1,64 +1,53 @@
 import styles from './reactForm.module.css';
 import { useForm } from "react-hook-form"
 import { useState } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
+import { api } from '../../utils/apiWrapper';
 
 const ReactForm = (props) => {
-    const [responseError, setResponseError] = useState('');
-    const [success, setSuccess] = useState(false);
+    const queryClient = useQueryClient();
+
+    const [error, setError] = useState();
 
     const { register, handleSubmit, watch, formState: { errors } } = useForm({
         defaultValues: {
             name: 'Pepe',
             email: 'pepe@gmail.com',
-            password: '12345',
+            password: '123456aaA',
             age: '30',
             fruit: 'apple'
         }
     });
 
-    const name = watch('name');
+    const addUser = (data) => {
+        api.post('/users', data);
+    };
 
+    const mutation = useMutation(addUser, {
+        onSuccess: () => {
+          // Invalidate and refetch
+            setError(undefined);
+            setTimeout(() => {
+                queryClient.invalidateQueries('users');
+            }, 100);
+        
+        },
+        onError: (error) => {
+            console.log(error);
+            setError(error.message);
+        }
+    });
 
     const onSubmit = (data) => {
         console.log(watch('name'));
-        console.log(data);
-        fetch('http://localhost:3001/users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then((response) => {
-            console.log(response);
-            if (response.status !== 200) {
-                setResponseError(true);
-            }
-            return response.json();
-        }).then((data) => {
-            console.log(data);
-            setSuccess(true);
-        }).catch((error) => {
-            console.log(error);
-            setResponseError(true);
-        });
+        mutation.mutate(data);
     };
 
-    if (responseError) return (
-        <div className={styles.container}>
-            <h1>HTML Form</h1>
-            <h3>Something went wrong!</h3>
-        </div>
-    );
-
-    if (success) return (
-        <div className={styles.container}>
-            <h1>HTML Form</h1>
-            <h3>User created!</h3>
-        </div>
-    );
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
+            <h2>Create user</h2>
+            {error && <div className={styles.error}>{error}</div>}
             <label for="name">
                 Name*:
             </label>
