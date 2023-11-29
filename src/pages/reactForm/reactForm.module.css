@@ -1,0 +1,10 @@
+.error {
+    color: tomato;
+    background-color: aliceblue;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 0;
+    border: 1px solid tomato;
+    padding: 5px;
+    border-radius: 5px;
+}
