@@ -9,7 +9,7 @@ const ReactForm = (props) => {
 
     const [error, setError] = useState();
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, watch, formState: { errors } } = useForm({
         defaultValues: {
             name: 'Pepe',
             email: 'pepe@gmail.com',
@@ -39,6 +39,7 @@ const ReactForm = (props) => {
     });
 
     const onSubmit = (data) => {
+        console.log(watch('name'));
         mutation.mutate(data);
     };
 
