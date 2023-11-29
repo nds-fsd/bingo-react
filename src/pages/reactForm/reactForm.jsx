@@ -18,7 +18,9 @@ const ReactForm = (props) => {
 
     const name = watch('name');
 
+
     const onSubmit = (data) => {
+        console.log(watch('name'));
         console.log(data);
         fetch('http://localhost:3001/users', {
             method: 'POST',
