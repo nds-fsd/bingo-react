@@ -1,8 +1,11 @@
 import axios from 'axios';
+import { getUserToken } from './localStorage.utils';
 
 export const api = axios.create({
     baseURL: 'http://localhost:3001',
-    headers: {'Content-Type': 'application/json',}
+    headers: {
+      'Content-Type': 'application/json',
+    }
 });
 
 export const  objectToQueryString = (obj) => {
@@ -10,4 +13,4 @@ export const  objectToQueryString = (obj) => {
       .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
       .join('&');
     return queryString;
-  }
+}

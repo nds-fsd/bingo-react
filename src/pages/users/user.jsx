@@ -1,10 +1,25 @@
 import { useQueryClient, useQuery } from "react-query";
 import { api } from "../../utils/apiWrapper";
 import UserDetail from "../../components/userDetail/userDetail";
+import { getUserToken } from "../../utils/localStorage.utils";
 
-const Users = () => {
+const Users = ({token}) => {
+
+    if (!token) {
+        return (
+            <div>
+                <h1>Users</h1>
+                <div>You are not logged in</div>
+            </div>
+        );
+    }
+
+    
     const getUsers = () => {
-        return api.get('/users')
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        return api.get('/users', config)
             .then(res => res.data)
             .catch(e => console.log(e));
     }
